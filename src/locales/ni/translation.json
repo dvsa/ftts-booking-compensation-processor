@@ -1,0 +1,22 @@
+{
+  "translation": {
+    "testTypes": {
+      "car": "Car",
+      "motorcycle": "Motorcycle",
+      "lgvmc": "LGV - multiple choice",
+      "lgvhpt": "LGV - hazard perception",
+      "lgvcpc": "LGV - Driver Certificate of Professional Competence (CPC)",
+      "lgvcpcc": "LGV to PCV conversion",
+      "pcvmc": "PCV - multiple choice",
+      "pcvhpt": "PCV - hazard perception",
+      "pcvcpc": "PCV - Driver Certificate of Professional Competence (CPC)",
+      "pcvcpcc": "PCV to LGV conversion",
+      "taxi": "Taxi",
+      "adip1": "ADI Part 1",
+      "adihpt": "ADI hazard perception",
+      "ers": "Enhanced Rider Scheme",
+      "adip1dva": "ADI Part 1",
+      "amip1": "AMI Part 1"
+    }
+  }
+}

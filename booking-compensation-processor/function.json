@@ -1,0 +1,13 @@
+{
+  "bindings": [
+    {
+      "name": "bookingCompensationProcessor",
+      "type": "timerTrigger",
+      "direction": "in",
+      "schedule": "%CRON_TIMER_VALUE%",
+      "runOnStartup": false,
+      "useMonitor": true
+    }
+  ],
+  "scriptFile": "../dist/booking-compensation-processor/index.js"
+}

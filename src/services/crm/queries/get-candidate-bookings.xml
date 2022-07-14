@@ -1,0 +1,79 @@
+<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false" count="{{recordsPerPage}}">
+  <entity name="ftts_bookingproduct">
+    <attribute name="ftts_bookingproductid" alias="bookingProductId" />
+    <attribute name="ftts_reference" alias="bookingProductReference" />
+    <attribute name="ftts_bookingstatus" alias="bookingStatus" />
+    <attribute name="ftts_testdate" alias="testDate" />
+    <attribute name="ftts_price" alias="price" />
+    <filter type="and">
+      <condition attribute="ftts_selected" operator="eq" value="1" /> <!-- Only selected booking products-->
+      <condition attribute="ftts_testdate" operator="ge" value="{{dateFrom}}" /> <!-- inclusive date From in UTC, e.g. "2021-06-01T00:00:00.000Z"-->
+      <condition attribute="ftts_testdate" operator="le" value="{{dateTo}}" /> <!-- inclusive date To in UTC, e.g. "2021-06-01T00:00:00.000Z"-->
+      <filter type="and">
+        <filter type="or">
+          <condition attribute="ftts_bookingstatus" operator="eq" value="{{confirmedBookingStatus}}" />
+        </filter>
+      </filter>
+    </filter>
+    <link-entity name="ftts_booking" from="ftts_bookingid" to="ftts_bookingid" link-type="inner" alias="booking">
+      <attribute name="ftts_bookingid" alias="bookingId" />
+      <attribute name="ftts_reference" alias="bookingReference" />
+      <attribute name="ftts_origin" alias="origin" />
+      <attribute name="ftts_nonstandardaccommodation" alias="isNsaBooking" />
+      <attribute name="ftts_governmentagency" alias="governmentAgency" />
+      <filter type="and">
+        <condition attribute="ftts_origin" operator="in">
+          <value>{{customerServiceCentreOrigin}}</value>
+          <value>{{candidateBookingPortalOrigin}}</value>
+        </condition>
+      </filter>
+    </link-entity>
+    <link-entity name="contact" from="contactid" to="ftts_candidateid" link-type="inner" alias="candidate">
+      <attribute name="contactid" alias="candidateId" />
+      <attribute name="ftts_firstandmiddlenames" alias="candidateFirstnames" />
+      <attribute name="lastname" alias="candidateSurname" />
+      <attribute name="emailaddress1" alias="candidateEmail" />
+      <attribute name="address1_line1" alias="candidateAddressLine1" />
+      <attribute name="address1_line2" alias="candidateAddressLine2" />
+      <attribute name="address1_line3" alias="candidateAddressLine3" />
+      <attribute name="ftts_address1_line4" alias="candidateAddressLine4" />
+      <attribute name="address1_city" alias="candidateAddressCity" />
+      <attribute name="address1_postalcode" alias="candidateAddressPostcode" />
+    </link-entity>
+    <link-entity name="account" from="accountid" to="ftts_ihttcid" link-type="inner" alias="testCentre">
+      <attribute name="accountid" alias="testCentreId" />
+      <attribute name="name" alias="testCentreName" />
+      <attribute name="ftts_remit" alias="testCentreRemit" />
+      <attribute name="address1_line1" alias="testCentreAddressLine1" />
+      <attribute name="address1_line2" alias="testCentreAddressLine2" />
+      <attribute name="address1_city" alias="testCentreAddressCity" />
+      <attribute name="address1_postalcode" alias="testCentreAddressPostCode" />
+      {{testCentreIdsFilter}}
+      <link-entity name="account" from="accountid" to="parentaccountid" link-type="inner" alias="tcn">
+        <attribute name="accountid" alias="tcnId" />
+        <attribute name="name" alias="tcnName" />
+        <attribute name="ftts_regiona" alias="isTcnRegionA" />
+        <attribute name="ftts_regionb" alias="isTcnRegionB" />
+        <attribute name="ftts_regionc" alias="isTcnRegionC" />
+      </link-entity>
+    </link-entity>
+    <!-- verify if it should be inner join and if there can be >1 financial trasaction of type Booking or Booking no payment-->
+    <link-entity name="ftts_financetransaction" from="ftts_bookingproduct" to="ftts_bookingproductid" link-type="outer" alias="financeTransaction">
+      <attribute name="ftts_financetransactionid" alias="financeTransactionId" />
+      <attribute name="ftts_status" alias="financeTransactionStatus" />
+      <attribute name="ftts_amount" alias="financeTransactionAmount" />
+      <filter type="and">
+        <condition attribute="ftts_type" operator="in">
+          <value>{{bookingFinanceTransactionType}}</value>
+        </condition>
+      </filter>
+    </link-entity>
+    <link-entity name="product" from="productid" to="ftts_productid" link-type="inner" alias="testType">
+      <attribute name="productid" alias="productId" />
+      <attribute name="name" alias="productName" />
+      <attribute name="productnumber" alias="productNumber" />
+    </link-entity>
+    <order attribute="ftts_reference" descending="false" />
+    <order attribute="ftts_bookingproductid" descending="false" />
+  </entity>
+</fetch>
