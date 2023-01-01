@@ -1,0 +1,8 @@
+// Included to recognise jest types within the eslint VSCode extension.
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": ["./**/*"]
+}

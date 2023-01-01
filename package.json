@@ -1,0 +1,110 @@
+{
+  "name": "ftts-booking-compensation-processor",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Booking compensation processor function for FTTS",
+  "engines": {
+    "node": ">=16.x",
+    "npm": ">=9.1"
+  },
+  "scripts": {
+    "audit": "npm audit --registry https://registry.npmjs.org/",
+    "audit:fix": "npm audit fix --registry https://registry.npmjs.org/",
+    "audit:fix-force": "npm audit fix --force --registry https://registry.npmjs.org/",
+    "build": "npm run clean && tsc",
+    "clean": "rimraf dist",
+    "copy-config": "cp local.settings.example.json local.settings.json",
+    "coverage-ci": "jest --coverage ./tests/unit/.*.test.ts --reporters=jest-junit --reporters=jest-standard-reporter --ci",
+    "func:start": "func start -p 7071 --verbose",
+    "lint": "eslint --ext .js,.ts .",
+    "lint:fix": "eslint --fix --ext .js,.ts .",
+    "lint:report": "eslint --ext .js,.ts . -f json -o lint/report.json",
+    "prestart": "npm run build && func extensions install",
+    "start": "npm run func:start",
+    "test": "jest ./tests/unit/.*.test.ts",
+    "test:coverage": "jest --verbose --coverage ./tests/unit/.*.test.ts",
+    "test:int": "jest --setupFiles dotenv/config --verbose ./tests/integration/.*.test.ts --reporters=jest-junit --reporters=jest-standard-reporter",
+    "test:int-bcp": "jest --setupFiles dotenv/config --verbose ./tests/integration/bcp.test.ts",
+    "test:int-crm": "jest --setupFiles dotenv/config --verbose ./tests/integration/crm.test.ts",
+    "test:watch": "jest --verbose ./tests/unit/.*.test.ts --watch"
+  },
+  "dependencies": {
+    "@azure/storage-blob": "12.7.0",
+    "@dvsa/azure-logger": "5.2.0",
+    "@dvsa/cds-retry": "1.0.0",
+    "@dvsa/egress-filtering": "4.0.2",
+    "@dvsa/ftts-auth-client": "5.0.4",
+    "@types/nock": "11.1.0",
+    "ajv": "8.6.2",
+    "ajv-errors": "3.0.0",
+    "ajv-formats": "2.1.0",
+    "axios": "0.26.1",
+    "axios-retry": "3.2.3",
+    "csv-writer": "1.6.0",
+    "dayjs": "1.10.6",
+    "dynamics-web-api": "1.7.4",
+    "i18next": "20.3.5",
+    "lodash.findlast": "4.6.0",
+    "lodash.forown": "4.4.0",
+    "lodash.groupby": "4.6.0",
+    "nock": "13.1.1",
+    "source-map-support": "0.5.19",
+    "ts-dedent": "2.1.1"
+  },
+  "devDependencies": {
+    "@azure/functions": "1.2.3",
+    "@babel/core": "7.14.6",
+    "@babel/plugin-proposal-class-properties": "7.14.5",
+    "@babel/preset-env": "7.14.7",
+    "@babel/preset-typescript": "7.14.5",
+    "@dvsa/eslint-config-ts": "2.0.1",
+    "@dvsa/ftts-crm-test-client": "5.2.1",
+    "@types/jest": "26.0.23",
+    "@types/jest-when": "2.7.3",
+    "@types/lodash.findlast": "4.6.6",
+    "@types/lodash.forown": "4.4.6",
+    "@types/lodash.groupby": "4.6.6",
+    "@types/mock-fs": "4.13.1",
+    "@types/node": "16.0.0",
+    "@types/uuid": "8.3.1",
+    "csv-string": "4.0.1",
+    "dotenv": "10.0.0",
+    "eslint-plugin-jest": "24.3.6",
+    "husky": "7.0.1",
+    "jest": "27.0.6",
+    "jest-junit": "13.0.0",
+    "jest-mock-extended": "2.0.1",
+    "jest-standard-reporter": "2.0.0",
+    "jest-when": "3.4.2",
+    "mock-fs": "5.0.0",
+    "mockdate": "3.0.5",
+    "rimraf": "3.0.2",
+    "ts-jest": "27.0.3",
+    "typescript": "4.3.5",
+    "uuid": "8.3.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run lint && npm run test"
+    }
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.ts"
+    ],
+    "coverageReporters": [
+      "lcov",
+      "html",
+      "text",
+      "text-summary"
+    ],
+    "setupFiles": [
+      "<rootDir>/setup-jest.js"
+    ],
+    "testEnvironment": "node",
+    "testRegex": [
+      "./tests/unit/.*.test.ts$",
+      "./tests/integration/.*.test.ts$"
+    ]
+  }
+}
